@@ -1,9 +1,9 @@
 import style from "@/styles/DraftPage.module.css";
 
-export default function Slot() {
+export default function Slot({ openPopUp }) {
     return (
-        <div className={style.slot}>
+        <button className={style.slot} onClick={openPopUp}>
             +
-        </div>
+        </button>
     );
 }
