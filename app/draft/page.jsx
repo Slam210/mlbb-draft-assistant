@@ -6,17 +6,21 @@ import SuggestionPanel from "@/components/SuggestionPanel";
 import HeroSearchModal from "@/components/HeroSearchModal";
 
 export default function DraftPage() {
-    const [heroName, setHeroName] = useState("");
     const [lane, setLane] = useState("");
     const [heroes, setHeroes] = useState([]);
-    const [isOpen, setIsOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
 
-    function closePopUp() {
-        setIsOpen(false);
+    const [banSlots, setBanSlots] = useState(Array(10).fill(null));
+    const [allySlots, setAllySlots] = useState(Array(5).fill(null));
+    const [enemySlots, setEnemySlots] = useState(Array(5).fill(null));
+    const setters = {
+        bans: setBanSlots,
+        allies: setAllySlots,
+        enemies: setEnemySlots
     }
-    function openPopUp() {
-        setIsOpen(true);
-    }
+
+    const [selectedPanel, setSelectedPanel] = useState(null);
+    const [selectedIndex, setSelectedIndex] = useState(null);
 
     useEffect(() => {
         fetch("/data/heroes_draft_data.json")
@@ -24,6 +28,41 @@ export default function DraftPage() {
             .then(data => setHeroes(data))
             .catch(err => console.error(err))
     }, []);
+
+    function closePopUp() {
+        setIsModalOpen(false);
+    }
+    function openPopUp() {
+        setIsModalOpen(true);
+    }
+
+    function resetDraft() {
+        setBanSlots(Array(10).fill(null));
+        setAllySlots(Array(5).fill(null));
+        setEnemySlots(Array(5).fill(null));
+    }
+
+    function handleSlotClick(panel, index) {
+        console.log(`Hai cliccato lo slot ${index} nel pannello ${panel}`);
+        setSelectedPanel(panel);
+        setSelectedIndex(index);
+        openPopUp();
+    }
+
+    function handleHeroSelect(heroId) {
+        const setter = setters[selectedPanel];
+        if (!setter) {
+            console.error("Unknown panel selected");
+            return;
+        }
+        setter(prev => {
+            const updated = [...prev];
+            updated[selectedIndex] = heroId;
+            return updated;
+        });
+
+        closePopUp();
+    }
 
     return (
         <main>
@@ -46,22 +85,38 @@ export default function DraftPage() {
 
             {/* Draft Panels */}
             <section>
-                <DraftPanel title="Bans" slots={10} openPopUp={openPopUp} />
-                <DraftPanel title="Allies" slots={5} openPopUp={openPopUp} />
-                <DraftPanel title="Enemies" slots={5} openPopUp={openPopUp} />
+                <DraftPanel
+                    title="bans"
+                    handleSlotClick={handleSlotClick}
+                    slots={banSlots}
+                    heroes={heroes}
+                />
+                <DraftPanel
+                    title="allies"
+                    handleSlotClick={handleSlotClick}
+                    slots={allySlots}
+                    heroes={heroes}
+                />
+                <DraftPanel
+                    title="enemies"
+                    handleSlotClick={handleSlotClick}
+                    slots={enemySlots}
+                    heroes={heroes}
+                />
+                <button className="btn" onClick={resetDraft}>Reset Draft</button>
             </section>
 
             {/* Suggestions */}
             <section>
                 <SuggestionPanel />
-                <button className="btn" onClick={openPopUp}>Apri Modal</button>
             </section>
 
             {/* HeroSearchModal component */}
             <HeroSearchModal
-                isOpen={isOpen}
+                isModalOpen={isModalOpen}
                 closePopUp={closePopUp}
                 heroes={heroes}
+                handleHeroSelect={handleHeroSelect}
             />
         </main >
     )

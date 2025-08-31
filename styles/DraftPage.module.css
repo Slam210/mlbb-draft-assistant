@@ -45,13 +45,20 @@
 .slot {
     width: 54px;
     height: 54px;
-    border: 2px dashed gray;
+    border: 3px solid gray;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     background-color: transparent;
     color: var(--font-primary);
+    border-radius: 80px;
+}
+
+.slot img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
 
 /* HeroSearchModal */
