@@ -32,6 +32,8 @@
     flex-direction: column;
     align-items: center;
 }
+
+/* Slot */
 .slotContainer {
     display: flex;
     gap: 0.5rem;
@@ -39,10 +41,12 @@
     justify-content: center;
     max-width: 310px;
 }
-
-/* Slot */
-
 .slot {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.slotIcon {
     width: 54px;
     height: 54px;
     border: 3px solid gray;
@@ -61,6 +65,13 @@
     object-fit: cover;
 }
 
+.nullSlotButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--red-mlbb);
+    border-radius: 6px;
+}
 /* HeroSearchModal */
 
 .overlay {
