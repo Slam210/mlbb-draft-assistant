@@ -160,3 +160,39 @@
     font-size: 1rem;
     text-align: left;
 }
+
+/* Suggestion Panel */
+
+.suggestionPanel {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.suggestedHero {
+    width: 300px;
+    padding: 4px;
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    border: 1px solid var(--border-color);
+    margin: 4px;
+    border-radius: 8px;
+    position: relative;
+}
+
+.suggestedHero img {
+    width: 40px;
+}
+
+.suggestedHero li {
+    font-size: 0.8rem;
+}
+
+.heroScore {
+    position: absolute;
+    right: 20px;
+    margin: auto;
+}

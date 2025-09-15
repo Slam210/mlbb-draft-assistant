@@ -120,7 +120,13 @@ export default function DraftPage() {
 
             {/* Suggestions */}
             <section>
-                <SuggestionPanel />
+                <SuggestionPanel
+                    heroes={heroes}
+                    bans={banSlots}
+                    allies={allySlots}
+                    enemies={enemySlots}
+                    pickedLane={lane}
+                />
             </section>
 
             {/* HeroSearchModal component */}
