@@ -211,9 +211,9 @@
 .errorBanner {
     position: fixed;
     top: 20px;
-    left: 10%;
+    left: 50%;
     transform: translateX(-50%);
-    background-color: #ff4d4f; /* rosso warning */
+    background-color: #ff4d4f;
     color: white;
     padding: 12px 20px;
     border-radius: 8px;
@@ -221,6 +221,8 @@
     z-index: 9999;
     font-weight: bold;
     animation: fadeInOut 3s ease forwards;
+    max-width: 90%; /* così non esce dai bordi su mobile */
+    text-align: center;
 }
 
 @keyframes fadeInOut {
