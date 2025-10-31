@@ -14,9 +14,9 @@ export default function DraftPage() {
     const [allySlots, setAllySlots] = useState(Array(5).fill(null));
     const [enemySlots, setEnemySlots] = useState(Array(5).fill(null));
     const setters = {
-        bans: setBanSlots,
-        allies: setAllySlots,
-        enemies: setEnemySlots
+        Banned: setBanSlots,
+        Allies: setAllySlots,
+        Enemies: setEnemySlots
     }
 
     const [selectedSlot, setSelectedSlot] = useState({ panel: null, index: null });
@@ -71,7 +71,7 @@ export default function DraftPage() {
             enemySlots.includes(heroId)
 
         if (isTaken) {
-            setErrorMessage(`${heroes[heroId - 1].name} è già stato scelto o bannato!`);
+            setErrorMessage(`${heroes[heroId - 1].name} è già stato scelto!`);
             setTimeout(() => setErrorMessage(""), 3000);
             closePopUp();
             return;
@@ -97,7 +97,7 @@ export default function DraftPage() {
 
             {/* Lane Selection */}
             <section className={style.laneSection}>
-                <h3>Your Lane:</h3>
+                <h3>Select Your Lane:</h3>
                 <select
                     value={lane}
                     onChange={(e) => { setLane(e.target.value); console.log(lane) }}
@@ -114,22 +114,22 @@ export default function DraftPage() {
 
             {/* Draft Panels */}
             <section>
-                <DraftPanel
+                {/* <DraftPanel
                     title="bans"
                     handleSlotClick={handleSlotClick}
                     handleNullSlotClick={handleNullSlotClick}
                     slots={banSlots}
                     heroes={heroes}
-                />
+                /> */}
                 <DraftPanel
-                    title="allies"
+                    title="Allies"
                     handleSlotClick={handleSlotClick}
                     handleNullSlotClick={handleNullSlotClick}
                     slots={allySlots}
                     heroes={heroes}
                 />
                 <DraftPanel
-                    title="enemies"
+                    title="Enemies"
                     handleSlotClick={handleSlotClick}
                     handleNullSlotClick={handleNullSlotClick}
                     slots={enemySlots}
