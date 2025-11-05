@@ -7,7 +7,7 @@ export default function Hero() {
         <div className="hero">
             <div className="background">
                 <Image
-                    src="/images/homeimg1.png"
+                    src="/images/homeimg2.jpg"
                     alt="Background home page image - mlbb art"
                     fill
                     priority
