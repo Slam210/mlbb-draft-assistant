@@ -1,5 +1,3 @@
-import style from "@/src/styles/DraftPage.module.css";
-
 export default function DraftPanel({
   title,
   handleSlotClick,
@@ -8,14 +6,38 @@ export default function DraftPanel({
   heroes,
 }) {
   return (
-    <div className={style.draftPanel}>
-      <h3>{title}</h3>
-      <div className={style.slotContainer}>
+    <div className="mb-5 flex flex-col items-center">
+      <h3 className="mb-1 flex flex-col items-center">{title}</h3>
+
+      <div className="grid grid-cols-3 md:grid-cols-5 gap-2 justify-items-center">
         {slots.map((el, i) => (
-          <div className={style.slot} key={i}>
+          <div key={i} className="flex flex-col gap-1">
+            {/* Remove slot button */}
             <button
-              className={style.slotIcon}
+              onClick={() => handleNullSlotClick(title, i)}
+              className="
+                flex items-center justify-center
+                rounded-md
+                text-white
+                text-sm
+                w-6 h-6
+                mx-auto
+              "
+            >
+              x
+            </button>
+            {/* Slot button */}
+            <button
               onClick={() => handleSlotClick(title, i)}
+              className="
+                w-16 h-16
+                border-[3px] border-gray-400
+                rounded-full
+                flex items-center justify-center
+                cursor-pointer
+                bg-transparent
+                overflow-hidden
+              "
             >
               {el === null || !heroes[el - 1] ? (
                 "+"
@@ -23,14 +45,9 @@ export default function DraftPanel({
                 <img
                   src={heroes[el - 1].icons.round}
                   alt={heroes[el - 1].name}
+                  className="w-full h-full object-cover"
                 />
               )}
-            </button>
-            <button
-              className={style.nullSlotButton}
-              onClick={() => handleNullSlotClick(title, i)}
-            >
-              x
             </button>
           </div>
         ))}

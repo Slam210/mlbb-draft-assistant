@@ -1,6 +1,6 @@
 "use client";
+
 import { useState, useEffect } from "react";
-import style from "@/src/styles/DraftPage.module.css";
 import DraftPanel from "@/src/app/_components/DraftPanel";
 import SuggestionPanel from "@/src/app/_components/SuggestionPanel";
 import HeroSearchModal from "@/src/app/_components/HeroSearchModal";
@@ -13,6 +13,7 @@ export default function Home() {
   const [banSlots, setBanSlots] = useState(Array(10).fill(null));
   const [allySlots, setAllySlots] = useState(Array(5).fill(null));
   const [enemySlots, setEnemySlots] = useState(Array(5).fill(null));
+
   const setters = {
     Banned: setBanSlots,
     Allies: setAllySlots,
@@ -23,6 +24,7 @@ export default function Home() {
     panel: null,
     index: null,
   });
+
   const [errorMessage, setErrorMessage] = useState("");
 
   useEffect(() => {
@@ -35,6 +37,7 @@ export default function Home() {
   function closePopUp() {
     setIsModalOpen(false);
   }
+
   function openPopUp() {
     setIsModalOpen(true);
   }
@@ -47,10 +50,8 @@ export default function Home() {
 
   function handleNullSlotClick(panel, index) {
     const setter = setters[panel];
-    if (!setter) {
-      console.error("Unknown panel selected");
-      return;
-    }
+    if (!setter) return;
+
     setter((prev) => {
       const updated = [...prev];
       updated[index] = null;
@@ -74,7 +75,7 @@ export default function Home() {
       enemySlots.includes(heroId);
 
     if (isTaken) {
-      setErrorMessage(`${heroes[heroId - 1].name} è già stato scelto!`);
+      setErrorMessage(`${heroes[heroId - 1].name} is already picked!`);
       setTimeout(() => setErrorMessage(""), 3000);
       closePopUp();
       return;
@@ -90,20 +91,38 @@ export default function Home() {
   }
 
   return (
-    <main>
-      {/* Error Banner*/}
-      {errorMessage && <div className={style.errorBanner}>{errorMessage}</div>}
+    <div className="min-h-screen bg-gray-900 text-white px-6 sm:px-10 lg:px-24 py-10 flex flex-col gap-10">
+      {/* Error Banner */}
+      {errorMessage && (
+        <div className="fixed top-6 left-1/2 -translate-x-1/2 bg-red-600 text-white px-6 py-3 rounded-xl shadow-lg z-50 text-base sm:text-lg">
+          {errorMessage}
+        </div>
+      )}
 
       {/* Lane Selection */}
-      <section className={style.laneSection}>
-        <h3>Select Your Lane:</h3>
+      <section className="flex flex-col sm:flex-row sm:items-center gap-6 justify-center">
+        <h3 className="text-xl sm:text-2xl font-semibold text-center sm:text-left">
+          Select Your Lane:
+        </h3>
+
         <select
           value={lane}
-          onChange={(e) => {
-            setLane(e.target.value);
-            console.log(lane);
-          }}
-          className={style.laneSelect}
+          onChange={(e) => setLane(e.target.value)}
+          className="
+        bg-gray-800
+        border-2 border-gray-700
+        text-white
+
+        px-6 py-4
+
+        rounded-xl
+
+        text-lg sm:text-xl
+
+        outline-none
+        focus:border-blue-500
+        focus:ring-1 focus:ring-blue-500
+      "
         >
           <option value="">--- ---</option>
           <option value="Gold Lane">Gold Lane</option>
@@ -115,7 +134,7 @@ export default function Home() {
       </section>
 
       {/* Draft Panels */}
-      <section>
+      <section className="flex flex-col gap-8 items-center">
         <DraftPanel
           title="Banned"
           handleSlotClick={handleSlotClick}
@@ -123,6 +142,7 @@ export default function Home() {
           slots={banSlots}
           heroes={heroes}
         />
+
         <DraftPanel
           title="Allies"
           handleSlotClick={handleSlotClick}
@@ -130,6 +150,7 @@ export default function Home() {
           slots={allySlots}
           heroes={heroes}
         />
+
         <DraftPanel
           title="Enemies"
           handleSlotClick={handleSlotClick}
@@ -137,13 +158,24 @@ export default function Home() {
           slots={enemySlots}
           heroes={heroes}
         />
-        <button className="btn" onClick={resetDraft}>
+
+        <button
+          onClick={resetDraft}
+          className="
+            mt-2
+            bg-gray-700 hover:bg-gray-600
+            text-white font-semibold
+            px-5 py-2
+            rounded-full
+            transition active:scale-95
+          "
+        >
           Reset Draft
         </button>
       </section>
 
       {/* Suggestions */}
-      <section>
+      <section className="w-full flex justify-center">
         <SuggestionPanel
           heroes={heroes}
           bans={banSlots}
@@ -153,13 +185,13 @@ export default function Home() {
         />
       </section>
 
-      {/* HeroSearchModal component */}
+      {/* Modal */}
       <HeroSearchModal
         isModalOpen={isModalOpen}
         closePopUp={closePopUp}
         heroes={heroes}
         handleHeroSelect={handleHeroSelect}
       />
-    </main>
+    </div >
   );
 }

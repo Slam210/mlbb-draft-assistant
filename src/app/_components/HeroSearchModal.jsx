@@ -1,6 +1,6 @@
 "use client";
+
 import { useState, useEffect } from "react";
-import style from "@/src/styles/DraftPage.module.css";
 
 export default function HeroSearchModal({
   isModalOpen,
@@ -11,15 +11,13 @@ export default function HeroSearchModal({
   const [query, setQuery] = useState("");
 
   useEffect(() => {
-    if (!isModalOpen) {
-      setQuery("");
-    }
+    if (!isModalOpen) setQuery("");
   }, [isModalOpen]);
 
   if (!isModalOpen) return null;
 
   const filteredHeroes = heroes.filter((hero) =>
-    hero.name.toLowerCase().includes(query.toLowerCase()),
+    hero.name.toLowerCase().includes(query.toLowerCase())
   );
 
   function handleKeyDown(e) {
@@ -31,38 +29,63 @@ export default function HeroSearchModal({
   }
 
   return (
-    <div className={style.overlay} onClick={closePopUp}>
-      <div className={style.modal} onClick={(e) => e.stopPropagation()}>
-        <button className={style.closeBtn} onClick={closePopUp}>
-          x
+    <div
+      className="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4"
+      onClick={closePopUp}
+    >
+      <div
+        className="w-full max-w-2xl bg-gray-950 border border-gray-800 rounded-xl shadow-2xl overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Header */}
+        <div className="flex items-center gap-3 p-4 border-b border-gray-800">          <button
+          onClick={closePopUp}
+          className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-800 text-white hover:bg-gray-700 active:scale-95 transition"
+        >
+          ✕
         </button>
-        <input
-          type="text"
-          className={style.inputSearch}
-          placeholder="Search the hero..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          onKeyDown={handleKeyDown}
-          autoFocus
-        />
-        <div className={style.heroSelectionSection}>
+
+          <input
+            type="text"
+            placeholder="Search heroes..."
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            onKeyDown={handleKeyDown}
+            autoFocus
+            className="flex-1 h-10 px-3 rounded-md bg-gray-900 text-white placeholder-gray-500 border border-gray-700 focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition"
+          />
+        </div>
+
+        {/* List */}
+        <div className="max-h-96 overflow-y-auto p-4 space-y-1 hide-scrollbar">
           {filteredHeroes.map((hero) => (
             <div
-              className={style.heroItem}
               key={hero.id}
               onClick={() => {
                 handleHeroSelect(hero.id);
-                console.log(hero.id);
+                closePopUp();
               }}
+              className="flex items-center gap-3 px-3 py-2 rounded-md cursor-pointer hover:bg-white/10 active:bg-white/5 transition"
             >
               <img
                 src={hero.icons.round}
                 alt={hero.name}
-                className={style.heroIcon}
+                className="w-8 h-8 rounded-full object-cover ring-1 ring-gray-700"
               />
-              <div className={style.heroName}>{hero.name}</div>
+              <span className="text-white text-sm truncate">
+                {hero.name}
+              </span>
             </div>
           ))}
+
+          {filteredHeroes.length === 0 && (
+            <div className="py-10 text-center">
+              <p className="text-gray-400 text-sm">No heroes found</p>
+              <p className="text-gray-600 text-xs mt-1">
+                Try a different search term
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>
