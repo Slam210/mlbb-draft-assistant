@@ -7,6 +7,9 @@ export default function HeroSearchModal({
   closePopUp,
   heroes,
   handleHeroSelect,
+  bans,
+  allySlots,
+  enemySlots
 }) {
   const [query, setQuery] = useState("");
 
@@ -16,9 +19,21 @@ export default function HeroSearchModal({
 
   if (!isModalOpen) return null;
 
-  const filteredHeroes = heroes.filter((hero) =>
-    hero.name.toLowerCase().includes(query.toLowerCase())
-  );
+  const excludedSet = new Set([
+    ...bans.filter(Boolean),
+    ...allySlots.filter(Boolean),
+    ...enemySlots.filter(Boolean),
+  ]);
+
+  const filteredHeroes = heroes.filter((hero) => {
+    const matchesSearch = hero.name
+      .toLowerCase()
+      .includes(query.toLowerCase());
+
+    const isExcluded = excludedSet.has(hero.id);
+
+    return matchesSearch && !isExcluded;
+  });
 
   function handleKeyDown(e) {
     if (e.key === "Enter" && filteredHeroes.length > 0) {
@@ -38,12 +53,13 @@ export default function HeroSearchModal({
         onClick={(e) => e.stopPropagation()}
       >
         {/* Header */}
-        <div className="flex items-center gap-3 p-4 border-b border-gray-800">          <button
-          onClick={closePopUp}
-          className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-800 text-white hover:bg-gray-700 active:scale-95 transition"
-        >
-          ✕
-        </button>
+        <div className="flex items-center gap-3 p-4 border-b border-gray-800">
+          <button
+            onClick={closePopUp}
+            className="w-8 h-8 flex items-center justify-center rounded-full bg-gray-800 text-white hover:bg-gray-700 active:scale-95 transition"
+          >
+            ✕
+          </button>
 
           <input
             type="text"
@@ -65,14 +81,15 @@ export default function HeroSearchModal({
                 handleHeroSelect(hero.id);
                 closePopUp();
               }}
-              className="flex items-center gap-3 px-3 py-2 rounded-md cursor-pointer hover:bg-white/10 active:bg-white/5 transition"
+              className="flex items-center gap-4 px-4 py-3 rounded-md cursor-pointer hover:bg-white/10 active:bg-white/5 transition"
             >
               <img
                 src={hero.icons.round}
                 alt={hero.name}
-                className="w-8 h-8 rounded-full object-cover ring-1 ring-gray-700"
+                className="w-10 h-10 rounded-full object-cover ring-1 ring-gray-700"
               />
-              <span className="text-white text-sm truncate">
+
+              <span className="text-white text-base truncate font-medium">
                 {hero.name}
               </span>
             </div>

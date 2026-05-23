@@ -134,7 +134,7 @@ export default function Home() {
       </section>
 
       {/* Draft Panels */}
-      <section className="flex flex-col gap-8 items-center">
+      <section className="flex flex-col gap-4 items-center">
         <DraftPanel
           title="Banned"
           handleSlotClick={handleSlotClick}
@@ -191,6 +191,9 @@ export default function Home() {
         closePopUp={closePopUp}
         heroes={heroes}
         handleHeroSelect={handleHeroSelect}
+        bans={banSlots}
+        allySlots={allySlots}
+        enemySlots={enemySlots}
       />
     </div >
   );

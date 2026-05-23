@@ -18,10 +18,11 @@ export default function DraftPanel({
               className="
                 flex items-center justify-center
                 rounded-md
-                text-white
+                text-red-500
                 text-sm
                 w-6 h-6
                 mx-auto
+                cursor-pointer
               "
             >
               x
