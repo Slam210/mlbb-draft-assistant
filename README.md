@@ -7,11 +7,11 @@ It analyzes hero relationships (counters, countered by, synergy, anti-synergy) a
 
 ## Features
 
--   Real-time draft suggestions based on selected lane and team composition
--   Dynamic scoring system considering hero relationships
--   Fast hero search and selection modal
--   Responsive design for desktop and mobile
--   Data extracted automatically from official MLBB sources
+- Real-time draft suggestions based on selected lane and team composition
+- Dynamic scoring system considering hero relationships
+- Fast hero search and selection modal
+- Responsive design for desktop and mobile
+- Data extracted automatically from official MLBB sources
 
 ---
 
@@ -37,21 +37,4 @@ All data is based on publicly available information from the
 
 The dataset only includes the top 5–10 visible relationships per hero, so the results are approximate and should be used as a general guideline rather than an absolute reference.
 
-**Last data update:** November 2025
-
 ---
-
-## Developer
-
-Created by **Vincenzo Farro**, a web developer and Mobile Legends player from Italy.  
-Future improvements will include patch-based updates, win rate analysis, and enhanced synergy logic.
-
--   GitHub: [github.com/vin-03](https://github.com/vin-03)
--   Website: [vincenzofarro.com](https://vincenzofarro.com)
--   LinkedIn: [linkedin.com/in/vincenzo-farro](https://www.linkedin.com/in/vincenzo-farro)
-
----
-
-## License
-
-This project is released under the **MIT License**.
