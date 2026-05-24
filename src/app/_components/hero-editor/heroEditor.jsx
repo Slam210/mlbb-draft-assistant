@@ -30,13 +30,12 @@ function CheckChip({ label, checked, onClick }) {
 }
 
 export default function HeroEditor() {
-    const [index, setIndex] = useState(0);
     const [heroes, setHeroes] = useState([]);
-    const hero = heroes[index];
     const [search, setSearch] = useState("");
     const [heroSearch, setheroSearch] = useState("");
     const [saving, setSaving] = useState(false);
-
+    const [selectedHeroId, setSelectedHeroId] = useState(null);
+    const hero = heroes.find(h => h.id === selectedHeroId);
 
     const loadHeroes = async () => {
         const { data, error } = await supabase
@@ -50,6 +49,10 @@ export default function HeroEditor() {
         }
 
         setHeroes(data);
+
+        if (data.length > 0) {
+            setSelectedHeroId(data[0].id);
+        }
     };
 
     useEffect(() => {
@@ -59,7 +62,7 @@ export default function HeroEditor() {
 
     function updateHero(field, value) {
         const copy = [...heroes];
-        copy[index] = { ...copy[index], [field]: value };
+        copy[selectedHeroId] = { ...copy[selectedHeroId], [field]: value };
         setHeroes(copy);
     }
 
@@ -98,21 +101,21 @@ export default function HeroEditor() {
     }
 
     function nextHero() {
-        setIndex((i) => Math.min(i + 1, heroes.length - 1));
+        const currentIndex = heroes.findIndex(h => h.id === selectedHeroId);
+        const next = heroes[currentIndex + 1];
+        if (next) setSelectedHeroId(next.id);
     }
 
     function prevHero() {
-        setIndex((i) => Math.max(i - 1, 0));
-    }
-
-    if (!Array.isArray(heroes) || heroes.length === 0) {
-        return <div className="p-6 text-white">Loading your heroes...</div>;
+        const currentIndex = heroes.findIndex(h => h.id === selectedHeroId);
+        const prev = heroes[currentIndex - 1];
+        if (prev) setSelectedHeroId(prev.id);
     }
 
     function toggleRelationship(type, targetId) {
         const copy = [...heroes];
 
-        const currentHero = copy[index];
+        const currentHero = copy[selectedHeroId];
         const targetHeroIndex = copy.findIndex((h) => h.id === targetId);
 
         if (targetHeroIndex === -1) return;
@@ -186,6 +189,15 @@ export default function HeroEditor() {
         setHeroes(copy);
     }
 
+    if (!Array.isArray(heroes) || heroes.length === 0) {
+        return <div className="p-6 text-white">Loading your heroes...</div>;
+    }
+
+    if (!hero) {
+        return <div className="p-6 text-white">Loading hero...</div>;
+    }
+
+
     return (
         <div className="flex h-screen bg-gray-950 text-white rounded p-4">
             {/* SIDEBAR */}
@@ -198,15 +210,20 @@ export default function HeroEditor() {
                     onChange={(e) => setheroSearch(e.target.value)}
                     className="w-full mb-4 bg-gray-900 border border-gray-700 rounded px-3 py-2 text-sm"
                 />
-                {heroes.filter((h) =>
-                    h.name.toLowerCase().includes(heroSearch.toLowerCase())).map((hero, i) => (
+                {heroes
+                    .filter((h) =>
+                        h.name.toLowerCase().includes(heroSearch.toLowerCase())
+                    )
+                    .map((h) => (
                         <div
-                            key={hero.id}
-                            onClick={() => setIndex(i)}
-                            className={`p-3 cursor-pointer hover:bg-gray-800 ${i === index ? "bg-gray-800" : ""
+                            key={h.id}
+                            onClick={() => setSelectedHeroId(h.id)}
+                            className={`p-3 cursor-pointer hover:bg-gray-800 ${h.id === hero?.id ? "bg-gray-800" : ""
                                 }`}
                         >
-                            <div className="font-semibold text-large">{hero.name}</div>
+                            <div className="font-semibold text-large">
+                                {h.name}
+                            </div>
                         </div>
                     ))}
             </div>

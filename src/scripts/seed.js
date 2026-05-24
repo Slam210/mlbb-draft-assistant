@@ -17,13 +17,30 @@ const heroes = JSON.parse(
 );
 
 async function seed() {
-  const { error } = await supabase.from("heroes").upsert(heroes);
+  const { errorPush } = await supabase
+    .from("heroes")
+    .upsert(heroes, { onConflict: "id", ignoreDuplicates: true });
 
-  if (error) {
-    console.error(error);
+  if (errorPush) {
+    console.error(errorPush);
   } else {
     console.log("Seed complete");
   }
+
+  const { data: dbHeroes, errorUpdate } = await supabase
+    .from("heroes")
+    .select("*");
+
+  if (errorUpdate) {
+    console.error(errorUpdate);
+    return;
+  }
+
+  fs.writeFileSync(
+    "./public/data/heroes_draft_data.json",
+    JSON.stringify(dbHeroes, null, 2),
+    "utf-8",
+  );
 }
 
 seed();
