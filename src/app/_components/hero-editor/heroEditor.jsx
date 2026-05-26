@@ -62,7 +62,18 @@ export default function HeroEditor() {
 
     function updateHero(field, value) {
         const copy = [...heroes];
-        copy[selectedHeroId] = { ...copy[selectedHeroId], [field]: value };
+
+        const heroIndex = copy.findIndex(
+            (h) => h.id === selectedHeroId
+        );
+
+        if (heroIndex === -1) return;
+
+        copy[heroIndex] = {
+            ...copy[heroIndex],
+            [field]: value,
+        };
+
         setHeroes(copy);
     }
 
@@ -115,7 +126,11 @@ export default function HeroEditor() {
     function toggleRelationship(type, targetId) {
         const copy = [...heroes];
 
-        const currentHero = copy[selectedHeroId];
+        const currentHeroIndex = copy.findIndex((h) => h.id === selectedHeroId);
+
+        if (currentHeroIndex === -1) return;
+
+        const currentHero = copy[currentHeroIndex];
         const targetHeroIndex = copy.findIndex((h) => h.id === targetId);
 
         if (targetHeroIndex === -1) return;
